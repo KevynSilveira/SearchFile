@@ -4,19 +4,23 @@ import tkinter as tk
 import customtkinter as ctk
 from tkinter import filedialog
 
+arquivos_encontrados = []
+
 def buscar_arquivos_por_termo():
     termo = entry_searchFile.get()
     diretorio = entry_select.get()
 
-    arquivos_encontrados = []
+    global arquivos_encontrados
     for nome_arquivo in os.listdir(diretorio):
         if termo.lower() in nome_arquivo.lower():
             arquivos_encontrados.append(os.path.join(diretorio, nome_arquivo))
     return arquivos_encontrados
 
-def zipar_arquivos(arquivos, destino):
+def zipar_arquivos():
+    global arquivos_encontrados
+    destino = entry_destiny.get()
     with zipfile.ZipFile(destino, 'w') as zip_file:
-        for arquivo in arquivos:
+        for arquivo in arquivos_encontrados:
             zip_file.write(arquivo, os.path.basename(arquivo))
 
 def selecionar_pasta_busca():
@@ -25,9 +29,16 @@ def selecionar_pasta_busca():
     entry_select.insert(0, diretorio)
 
 def selecionar_pasta_destino():
-    destino_zip = filedialog.asksaveasfilename(defaultextension=".zip")
+    filetypes = [('Arquivos', '*.zip')]
+    destino_zip = filedialog.asksaveasfilename(defaultextension=".zip", initialfile="Arquivos", filetypes=filetypes)
     entry_destiny.delete(0, tk.END)
     entry_destiny.insert(0, destino_zip)
+
+
+def executa():
+    buscar_arquivos_por_termo()
+    zipar_arquivos()
+    selecionar_pasta_destino()
 
 
 frame = ctk.CTk()
@@ -53,9 +64,7 @@ label_searchFile.place(x=25, y=160)
 entry_searchFile = ctk.CTkEntry(master=frame, width=150, height=30)
 entry_searchFile.place(x=25, y=190)
 
-button_execute = ctk.CTkButton(master=frame, text= "Executar", width=150, height=30)
+button_execute = ctk.CTkButton(master=frame, text= "Executar", width=150, height=30, command=executa)
 button_execute.place(x=25, y=260)
 
 frame.mainloop()
-
-
