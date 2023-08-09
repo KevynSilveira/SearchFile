@@ -16,7 +16,7 @@ def search(): # Busca os arquivos por código
             arquivos_encontrados.append(os.path.join(directory, file))
     return arquivos_encontrados
 
-def zip():
+def zip(): # compacta os arquivos
     global arquivos_encontrados
     filetypes = [('Arquivos', '*.zip')]
     destiny = filedialog.asksaveasfilename(defaultextension=".zip", initialfile="Arquivos", filetypes=filetypes)
@@ -24,7 +24,7 @@ def zip():
         for file in arquivos_encontrados:
             zip_file.write(file, os.path.basename(file))
 
-def select():
+def select(): # Seleciona o direório de busca
     diretorio = filedialog.askdirectory()
     entry_select.delete(0, tk.END)
     entry_select.insert(0, diretorio)
@@ -42,24 +42,32 @@ def execute():
         messagebox.showerror("ATENÇÃO", f"Ocorreu um erro: {e}")
 
 frame = ctk.CTk()
-frame.geometry("200x200")
-frame.title("Busca arquivos")
+frame.geometry("240x240")
+frame.title("SearchFile")
 frame.resizable(False, False)
 
-button_select = ctk.CTkButton(master=frame, text= "Diretório origem", width=150, height=30, command=select)
-button_select.place(x=25, y=10)
+label_searchFile = ctk.CTkLabel(master=frame,text="SearchFile", width=180, height=30)
+label_searchFile.configure(justify="center", font=("arial", 18))
+label_searchFile.place(x=30, y=5)
 
-entry_select = ctk.CTkEntry(master=frame, width=150, height=30)
-entry_select.place(x=25, y=50)
+button_select = ctk.CTkButton(master=frame, text= "Diretório origem", width=180, height=30, command=select, fg_color="dark grey", text_color="black", hover_color="gray")
+button_select.configure(font=("arial", 14))
+button_select.place(x=30, y=50)
 
-label_searchFile = ctk.CTkLabel(master=frame,text="Código", width=150, height=30)
-label_searchFile.place(x=25, y=90)
+entry_select = ctk.CTkEntry(master=frame, width=180, height=30)
+entry_select.configure(justify="center", font=("arial", 14))
+entry_select.place(x=30, y=90)
 
-entry_searchFile = ctk.CTkEntry(master=frame, width=150, height=30)
-entry_searchFile.place(x=25, y=120)
-entry_searchFile.configure(justify="center")
+label_code = ctk.CTkLabel(master=frame,text="Insira a palavra chave:", width=180, height=30, text_color="white")
+label_code.configure(justify="center", font=("arial", 16))
+label_code.place(x=30, y=125)
 
-button_execute = ctk.CTkButton(master=frame, text= "Executar", width=150, height=30, command=execute)
-button_execute.place(x=25, y=160)
+entry_searchFile = ctk.CTkEntry(master=frame, width=180, height=30)
+entry_searchFile.place(x=30, y=160)
+entry_searchFile.configure(justify="center", font=("arial", 14))
+
+button_execute = ctk.CTkButton(master=frame, text="Executar", width=180, height=30, command=execute, fg_color="dark grey", text_color="black", hover_color="gray")
+button_execute.configure(font=("arial", 14))
+button_execute.place(x=30, y=200)
 
 frame.mainloop()
